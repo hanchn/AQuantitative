@@ -27,17 +27,6 @@ nohup python stock_monitor.py > run.log 2>&1 &
           
 # 关于如何关闭 sudo nohup 进程
 
-根据您提供的进程信息，我看到您的 `stock_monitor.py` 进程是通过 `sudo nohup` 命令启动的：
-
-```
-0  8935  3617   0  2:48PM ttys335    0:00.02 sudo nohup python stock_monitor.py 
-501 10637  3617   0  2:50PM ttys335    0:00.00 grep stock_monitor.py
-```
-
-这就是为什么您可能无法正常关闭它的原因。当使用 `sudo` 启动进程时，该进程以 root 权限运行，普通的 `kill` 命令可能无法终止它。
-
-## 正确关闭 sudo 启动的进程
-
 1. **使用 sudo kill 命令**：
    ```bash
    sudo kill 8935

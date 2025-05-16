@@ -1,7 +1,7 @@
 {
-  "interval": 10,          
-  "write_interval": 60,    
-  "file_interval": 600,   
+  "interval": 60,
+  "write_interval": 60,
+  "file_interval": 600,
   "stocks": [
     {
       "code": "sh600519",

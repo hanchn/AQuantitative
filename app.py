@@ -2,7 +2,7 @@ import requests
 import time
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 LOG_DIR = 'log'
 CONFIG_PATH = 'config.json'
@@ -36,7 +36,6 @@ class StockTracker:
         self.has_position = False
         self.buy_price_real = 0
         self.data_buffer = []
-        # 文件分片相关
         self.file_start = datetime.now()
         self.file = self._get_new_log_file()
         self.last_write = datetime.now()
@@ -45,6 +44,7 @@ class StockTracker:
         self.file_start = datetime.now()
         filename = f"{self.code}_{self.file_start.strftime('%Y-%m-%d_%H%M')}.log"
         filepath = os.path.join(LOG_DIR, filename)
+        print(f"[{self.file_start.strftime('%Y-%m-%d %H:%M:%S')}] [{self.code}] 新建日志文件: {filepath}")
         return open(filepath, 'a', encoding='utf-8')
 
     def update(self):
@@ -67,20 +67,22 @@ class StockTracker:
                 print(f"{info['time']} [{self.code}] 建议卖出！卖出价: {curr:.2f}，盈利: {profit:.2f}")
                 self.has_position = False
 
-    def maybe_rotate_file(self, file_interval):
-        now = datetime.now()
-        if (now - self.file_start).total_seconds() >= file_interval:
-            self.file.close()
-            self.file = self._get_new_log_file()
-
     def maybe_write_log(self, write_interval):
         now = datetime.now()
         if (now - self.last_write).total_seconds() >= write_interval and self.data_buffer:
             for entry in self.data_buffer:
                 self.file.write(json.dumps(entry, ensure_ascii=False) + '\n')
             self.file.flush()
+            print(f"[{now.strftime('%Y-%m-%d %H:%M:%S')}] [{self.code}] 写入 {len(self.data_buffer)} 条到日志文件")
             self.data_buffer = []
             self.last_write = now
+
+    def maybe_rotate_file(self, file_interval):
+        now = datetime.now()
+        if (now - self.file_start).total_seconds() >= file_interval:
+            self.file.close()
+            print(f"[{now.strftime('%Y-%m-%d %H:%M:%S')}] [{self.code}] 日志分片，切换新文件")
+            self.file = self._get_new_log_file()
 
 def load_config(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -94,15 +96,19 @@ def main():
     file_interval = config.get('file_interval', 600)   # 文件分片频率
     stocks_cfg = config['stocks']
     stocks = [StockTracker(cfg['code'], cfg['buy_price'], cfg['sell_price']) for cfg in stocks_cfg]
-    print(f"监控 {len(stocks)} 支股票，抓取频率: {interval}s，写入频率: {write_interval}s，日志分片: {file_interval}s")
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 监控 {len(stocks)} 支股票，抓取频率: {interval}s，写入频率: {write_interval}s，日志分片: {file_interval}s")
+    loop_count = 0
     while True:
+        loop_count += 1
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] 第{loop_count}轮采集...")
         for s in stocks:
             try:
                 s.update()
+                print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] {s.code} 抓取到 {len(s.data_buffer)} 条，最高: {s.highest}，最低: {s.lowest}")
                 s.maybe_write_log(write_interval)
                 s.maybe_rotate_file(file_interval)
             except Exception as e:
-                print(f"异常: {e}")
+                print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] [{s.code}] 异常: {e}")
         time.sleep(interval)
 
 if __name__ == '__main__':
