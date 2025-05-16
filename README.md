@@ -1,6 +1,4 @@
-```
-nohup python stock_monitor.py > run.log 2>&1 &
-```
+
 ---
 
 ### **用法**
@@ -13,9 +11,9 @@ nohup python stock_monitor.py > run.log 2>&1 &
 
 2. **一键启动：**
 
-   ```bash
-   ./stock_monitor.sh
-   ```
+```
+nohup python stock_monitor.py > run.log 2>&1 &
+```
 
 3. **后台一直跑，日志在 `run.log`，所有 Python 错误和输出都在这。**
 

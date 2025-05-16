@@ -1,5 +1,5 @@
 {
-  "interval": 60,          
+  "interval": 10,          
   "write_interval": 60,    
   "file_interval": 600,   
   "stocks": [
