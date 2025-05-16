@@ -1,0 +1,19 @@
+{
+  "name": "aquantitative",
+  "version": "1.0.0",
+  "description": "---",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "l": "node ./leader_analysis.js",
+    "t": "node ./t_recommend.js",
+    "n": "node ./news.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "playwright": "^1.52.0"
+  }
+}

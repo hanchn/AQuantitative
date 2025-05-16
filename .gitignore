@@ -1,0 +1,49 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 本地运行日志和缓存
+log/
+*.log
+
+# 配置密钥
+.env
+.env.local
+.env.*.local
+
+# 个人/临时配置
+*.sublime-workspace
+*.sublime-project
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# OS文件
+.DS_Store
+Desktop.ini
+
+# 结果数据与本地缓存
+*.csv
+*.xls
+*.xlsx
+*.tmp
+
+# 历史K线/采集数据本地缓存（如果有）
+*.jsonl
+*.history.json
+
+# 不追踪个人临时脚本
+tmp/
+scripts/
+
+# 不追踪打包/编译产物
+dist/
+build/
+out/
+
+# 不追踪你导出的分析报告
+*.report.*
+*.bak
