@@ -1,0 +1,17 @@
+{
+  "interval": 60,          
+  "write_interval": 60,    
+  "file_interval": 600,   
+  "stocks": [
+    {
+      "code": "sh600519",
+      "buy_price": 1550.0,
+      "sell_price": 1700.0
+    },
+    {
+      "code": "sz000001",
+      "buy_price": 10.0,
+      "sell_price": 12.0
+    }
+  ]
+}
